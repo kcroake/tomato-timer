@@ -15,11 +15,12 @@ class TomatoTimer
 	end
 	def startTimer(oneTomato = 25)
 		tomatoSeconds = oneTomato * 60 ## Replace 5 with 60 for seconds in a minute
-		while tomatoSeconds >= 1 do
+		while tomatoSeconds >= 0 do
 			if tomatoSeconds == 0
-				puts "End Pomodoro, take break? (5:00)" 
+				puts "End Pomodoro, break starting" 
+				self.startBreak()
 			elsif tomatoSeconds == oneTomato * 60
-				puts "Start Pomodoro" + self.formatted_duration(tomatoSeconds)
+				puts "Start Pomodoro " + self.formatted_duration(tomatoSeconds)
 			else
 				puts self.formatted_duration(tomatoSeconds)
 			end
@@ -27,10 +28,23 @@ class TomatoTimer
 			sleep 1
 		end
 	end
+	def startBreak(oneBreak = 5)
+		breakSeconds = oneBreak * 60
+		while breakSeconds >= 0 do 
+			if breakSeconds == 0
+				puts "Congrats you finished! Run ruby index.rb to start again"
+			else
+				puts self.formatted_duration(breakSeconds)
+			end
+			breakSeconds = breakSeconds - 1
+			sleep 1
+		end
+	end
 end
-
-tomato = gets.to_i ? gets.to_i : 25
-
-if tomato != 0
+puts "Enter minutes (Default is 25):"
+tomato = gets.to_i
+if tomato != 0 && tomato != nil
 	TomatoTimer.new.startTimer(tomato)
+else
+	TomatoTimer.new.startTimer(25)
 end
