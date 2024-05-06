@@ -1,6 +1,8 @@
+require 'json'
 class TomatoTimer
 	def initialize
-		@startTime = Time.now
+		@start_time = Time.now
+		@tomato_session = {}
 	end	
 	def formatted_duration(total_seconds)
 	  total_seconds = total_seconds.round # to avoid fractional seconds potentially compounding and messing up seconds, minutes and hours
@@ -13,38 +15,44 @@ class TomatoTimer
 		t.round.to_s.rjust(2,'0')
 	  end.join(':')
 	end
-	def startTimer(oneTomato = 25)
-		tomatoSeconds = oneTomato * 60 ## Replace 5 with 60 for seconds in a minute
-		while tomatoSeconds >= 0 do
-			if tomatoSeconds == 0
+	def write_jason()
+		File.write('recent-sessions.json', 'Data', mode: 'a')
+		#write local json file to store sessions
+	end
+	def start_timer(one_tomato = 25)
+		tomato_seconds = one_tomato * 60 ## Replace 5 with 60 for seconds in a minute
+		while tomato_seconds >= 0 do
+			if tomato_seconds == 0
 				puts "End Pomodoro, break starting" 
-				self.startBreak()
-			elsif tomatoSeconds == oneTomato * 60
-				puts "Start Pomodoro " + self.formatted_duration(tomatoSeconds)
+				##self.start_break()
+			elsif tomato_seconds == one_tomato * 60
+				puts "Start Pomodoro " + self.formatted_duration(tomato_seconds)
 			else
-				puts self.formatted_duration(tomatoSeconds)
+				puts self.formatted_duration(tomato_seconds)
 			end
-			tomatoSeconds = tomatoSeconds - 1
+			tomato_seconds = tomato_seconds - 1
 			sleep 1
 		end
 	end
-	def startBreak(oneBreak = 5)
-		breakSeconds = oneBreak * 60
-		while breakSeconds >= 0 do 
-			if breakSeconds == 0
+	def start_break(one_break = 5)
+		break_seconds = one_break * 60
+		while break_seconds >= 0 do 
+			if break_seconds == 0
 				puts "Congrats you finished! Run ruby index.rb to start again"
 			else
-				puts self.formatted_duration(breakSeconds)
+				puts self.formatted_duration(break_seconds)
 			end
-			breakSeconds = breakSeconds - 1
+			break_seconds = break_seconds - 1
 			sleep 1
 		end
 	end
+	
 end
-puts "Enter minutes (Default is 25):"
-tomato = gets.to_i
-if tomato != 0 && tomato != nil
-	TomatoTimer.new.startTimer(tomato)
-else
-	TomatoTimer.new.startTimer(25)
-end
+TomatoTimer.new.write_jason();
+# puts "Enter minutes (Default is 25):"
+# tomato = gets.to_i
+# if tomato != 0 && tomato != nil
+# 	TomatoTimer.new.start_timer(tomato)
+# else
+# 	TomatoTimer.new.start_timer(25)
+# end
