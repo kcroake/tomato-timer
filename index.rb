@@ -1,8 +1,20 @@
-require 'json'
+require 'sqlite3'
+db = SQLite3::Database.new "pomodoro-sessions.db"
+rows = db.execute <<-SQL
+	create table sessions (
+		SessionTitle varchar(55),
+		SessionStart DATETIME,
+		SessionEnd DATETIME,
+		SessionDescription varchar(255),
+		SessionCompleted boolean	
+	);
+SQL
 class TomatoTimer
-	def initialize
+	def initialize(title, description)
 		@start_time = Time.now
-		@tomato_session = {}
+		@end_time = nil
+		@title = title
+		@description = description
 	end	
 	def formatted_duration(total_seconds)
 	  total_seconds = total_seconds.round # to avoid fractional seconds potentially compounding and messing up seconds, minutes and hours
@@ -15,10 +27,12 @@ class TomatoTimer
 		t.round.to_s.rjust(2,'0')
 	  end.join(':')
 	end
-	def write_jason()
-		File.write('recent-sessions.json', 'Data', mode: 'a')
-		#write local json file to store sessions
-	end
+	
+	def write_session(@title, @start_time, @end_time, @description)
+		db.execute("INSERT INTO sessions (SessionTitle, SessionStart, SessionEnd, SessionDescription, SessionCompleted)
+		VALUES (?,?,?,?,?)",[@title, @start_time, @end_time, @description, true])	
+	end	
+	
 	def start_timer(one_tomato = 25)
 		tomato_seconds = one_tomato * 60 ## Replace 5 with 60 for seconds in a minute
 		while tomato_seconds >= 0 do
@@ -48,7 +62,6 @@ class TomatoTimer
 	end
 	
 end
-TomatoTimer.new.write_jason();
 # puts "Enter minutes (Default is 25):"
 # tomato = gets.to_i
 # if tomato != 0 && tomato != nil
