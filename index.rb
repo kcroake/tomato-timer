@@ -18,7 +18,7 @@ class TomatoTimer
 		start = gets.to_s.chomp
 		case start
 			when "yes"
-				one_tomato = 0 #update to 25
+				one_tomato = 25 #update to 25
 				tomato_seconds = one_tomato * 60 ## Replace 5 with 60 for seconds in a minute
 				while tomato_seconds >= 0 do
 					if tomato_seconds == 0
@@ -40,7 +40,7 @@ class TomatoTimer
 	end
 	
 	def start_break()
-		one_break = 0 # update to 5
+		one_break = 5 # update to 5
 		puts "Start Break?"
 		bool = gets.to_s.chomp
 		case bool
@@ -62,7 +62,7 @@ class TomatoTimer
 		end
 	end
 end
-TomatoTimer.new.start_timer
+##TomatoTimer.new.start_timer
 # puts "Enter minutes (Default is 25):"
 # tomato = gets.to_i
 # if tomato != 0 && tomato != nil

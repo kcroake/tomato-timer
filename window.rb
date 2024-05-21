@@ -1,10 +1,13 @@
-require 'glimmer-dsl-swt'
+require 'glimmer-dsl-libui'
+load 'index.rb'
 include Glimmer
 
-shell {
-  text "Glimmer"
 
-  label {
-	text "Hello, World!"
+
+window('Tomato Time', 300, 450){
+  button('Start Timer'){
+    on_clicked do
+      TomatoTimer.new.start_timer
+    end
   }
-}.open
+}.show
